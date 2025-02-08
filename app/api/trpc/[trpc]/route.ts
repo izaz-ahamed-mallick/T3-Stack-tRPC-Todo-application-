@@ -1,14 +1,13 @@
+import { createContext } from "@/server/context";
 import { appRouter } from "@/server/root";
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 
-export const runtime = "edge";
-
 const handler = (req: Request) =>
     fetchRequestHandler({
-        endpoint: "/api/trpc",
+        endpoint: "/api/trpc", // This could be left as is if you're using dynamic routing with Next.js App Router
         req,
         router: appRouter,
-        createContext: () => ({}), // You can extend this if needed
+        createContext,
     });
 
 export { handler as POST, handler as GET };
