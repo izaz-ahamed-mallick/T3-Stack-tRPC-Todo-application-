@@ -12,8 +12,10 @@ const TRPCProvider = ({ children }: { children: React.ReactNode }) => {
     const trpcClient = trpc.createClient({
         links: [
             httpBatchLink({
-                url: `${process.env.NEXT_PUBLIC_API_URL}/api/trpc`,
-                transformer: SuperJSON, // ✅ Transformer now belongs here!
+                url: process.env.NEXT_PUBLIC_API_URL
+                    ? `${process.env.NEXT_PUBLIC_API_URL}/api/trpc`
+                    : "/api/trpc",
+                transformer: SuperJSON,
             }),
         ],
     });

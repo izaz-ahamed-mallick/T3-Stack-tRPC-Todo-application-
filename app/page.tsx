@@ -1,4 +1,6 @@
 import { trpcCaller } from "@/utils/trpcServer";
+import SignupPage from "./auth/signup/page";
+import Link from "next/link";
 
 const Home = async () => {
     const data = await trpcCaller.todo.getAllTodos();
@@ -11,6 +13,9 @@ const Home = async () => {
                     <li key={todo.id}>{todo.title}</li>
                 ))}
             </ul>
+            <SignupPage />
+
+            <Link href={"/auth/login"}>Login</Link>
         </div>
     );
 };
