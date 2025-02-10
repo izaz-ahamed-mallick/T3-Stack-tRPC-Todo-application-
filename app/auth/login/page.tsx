@@ -2,9 +2,10 @@
 
 import { useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { FiClipboard, FiLock, FiMail } from "react-icons/fi";
+import { useRouter } from "next/navigation";
 
 type LoginFormValues = {
     email: string;
@@ -13,6 +14,11 @@ type LoginFormValues = {
 
 const Login = () => {
     const [error, setError] = useState("");
+    const [isMounted, setIsMounted] = useState(false);
+    const router = useRouter();
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
     const {
         register,
         handleSubmit,
@@ -30,8 +36,14 @@ const Login = () => {
 
         if (result?.error) {
             setError(result.error);
+        } else {
+            router.replace("/todo/todohome");
         }
     };
+
+    if (!isMounted) {
+        return null;
+    }
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen transition-colors bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-white">
@@ -90,7 +102,7 @@ const Login = () => {
                         type="submit"
                         disabled={isSubmitting}
                         className="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-semibold transition duration-300 shadow-lg relative 
-                        before:absolute before:inset-0 before:rounded-lg before:bg-green-400 before:opacity-0 before:transition before:duration-300 before:hover:opacity-100"
+                        before:absolute before:inset-0 before:rounded-lg before:bg-green-400 before:opacity-0 before:transition before:duration-300"
                     >
                         {isSubmitting ? "Logging in..." : "Let’s Go 🚀"}
                     </button>

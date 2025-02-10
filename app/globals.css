@@ -21,12 +21,5 @@ body.dark {
 
 /* Add modern dark gradient background */
 body {
-    background: linear-gradient(
-        135deg,
-        rgba(0, 0, 0, 0.9),
-        /* Dark, almost black */ rgba(0, 0, 0, 0.7),
-        /* Slightly lighter black */ rgba(15, 15, 15, 0.8)
-            /* Deep charcoal gray */
-    );
     @apply transition-all duration-300;
 }

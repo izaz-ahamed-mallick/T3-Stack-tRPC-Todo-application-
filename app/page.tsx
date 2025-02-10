@@ -1,8 +1,10 @@
-import { getSession } from "next-auth/react";
+"use client";
 
-const Home = async () => {
-    // Fetch the session asynchronously
-    const session = await getSession();
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+
+const Home = () => {
+    const { data: session } = useSession();
 
     return (
         <div className="min-h-screen transition-all duration-300">
@@ -16,28 +18,26 @@ const Home = async () => {
 
                 {/* Conditionally show buttons based on user session */}
                 {session ? (
-                    // If logged in, show the "Go to Todo Page" button
-                    <a
-                        href="/todos"
+                    <Link
+                        href="/todo/todohome"
                         className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white py-3 px-8 rounded-xl shadow-lg font-semibold transition duration-300 transform hover:scale-105"
                     >
                         Go to Todo Page
-                    </a>
+                    </Link>
                 ) : (
-                    // If not logged in, show the "Login" and "Sign Up" buttons side by side
                     <div className="flex space-x-4">
-                        <a
+                        <Link
                             href="/auth/login"
                             className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-8 rounded-xl shadow-lg font-semibold transition duration-300 transform hover:scale-105 w-full sm:w-auto"
                         >
                             Login
-                        </a>
-                        <a
+                        </Link>
+                        <Link
                             href="/auth/signup"
                             className="bg-indigo-600 hover:bg-indigo-700 text-white py-3 px-8 rounded-xl shadow-lg font-semibold transition duration-300 transform hover:scale-105 w-full sm:w-auto"
                         >
                             Sign Up
-                        </a>
+                        </Link>
                     </div>
                 )}
             </div>

@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { trpc } from "@/utils/trpcClient";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -32,10 +31,8 @@ export default function SignupPage() {
         resolver: zodResolver(signupSchema),
     });
 
-    const [success, setSuccess] = useState(false);
     const signupMutation = trpc.auth.signup.useMutation({
         onSuccess: () => {
-            setSuccess(true);
             router.push("/auth/login");
         },
     });
@@ -121,7 +118,7 @@ export default function SignupPage() {
                             {signupMutation.error.message}
                         </p>
                     )}
-                    {success && (
+                    {signupMutation.isSuccess && (
                         <p className="text-green-500 text-center text-sm mt-2">
                             Signup successful! 🎉
                         </p>
@@ -130,7 +127,7 @@ export default function SignupPage() {
                     <p className="text-sm text-center mt-4 text-gray-600 dark:text-gray-400">
                         Already have an account?{" "}
                         <Link
-                            href="/login"
+                            href="/auth/login"
                             className="text-green-500 hover:underline"
                         >
                             Log in here

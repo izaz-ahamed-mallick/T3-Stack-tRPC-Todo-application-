@@ -5,6 +5,8 @@ import TRPCProvider from "./components/Provider";
 import ThemeToggle from "./components/ThemeToggle";
 import { Providers } from "./components/Theme-context";
 
+import AuthProvider from "./components/AuthProvider";
+
 const geistSans = Geist({
     variable: "--font-geist-sans",
     subsets: ["latin"],
@@ -28,12 +30,16 @@ export default function RootLayout({
     return (
         <html lang="en" suppressHydrationWarning>
             <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-br from-black via-transparent to-black dark:bg-gradient-to-br dark:from-black dark:via-gray-800 dark:to-black`}
+                className={`${geistSans.variable} ${geistMono.variable} bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-white
+
+`}
             >
                 <Providers>
                     <TRPCProvider>
-                        {children}
-                        <ThemeToggle />
+                        <AuthProvider>
+                            {children}
+                            <ThemeToggle />
+                        </AuthProvider>
                     </TRPCProvider>
                 </Providers>
             </body>

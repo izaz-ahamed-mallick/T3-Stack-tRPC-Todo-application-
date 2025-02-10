@@ -25,9 +25,8 @@ declare module "next-auth/jwt" {
 }
 
 export const authOptions: NextAuthOptions = {
-    debug: true, // ✅ Enable debug mode
     adapter: PrismaAdapter(prisma),
-    session: { strategy: "jwt" }, // ✅ Using JWT session (required for CredentialsProvider)
+    session: { strategy: "jwt" },
     providers: [
         CredentialsProvider({
             name: "Credentials",
