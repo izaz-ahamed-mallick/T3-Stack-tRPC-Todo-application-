@@ -1,21 +1,32 @@
+/* globals.css */
+
+/* Base styles */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* globals.css */
+
+/* Light Mode Variables */
+body.light {
+    --background: #ffffff; /* White background for light mode */
+    --foreground: #000000; /* Black text for light mode */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Dark Mode Variables */
+body.dark {
+    --background: #121212; /* Very dark background for dark mode */
+    --foreground: #ffffff; /* White text for dark mode */
 }
 
+/* Add modern dark gradient background */
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(
+        135deg,
+        rgba(0, 0, 0, 0.9),
+        /* Dark, almost black */ rgba(0, 0, 0, 0.7),
+        /* Slightly lighter black */ rgba(15, 15, 15, 0.8)
+            /* Deep charcoal gray */
+    );
+    @apply transition-all duration-300;
 }
