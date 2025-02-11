@@ -4,19 +4,23 @@ import { usePathname, useRouter } from "next/navigation";
 import {
     FiHome,
     FiCheckCircle,
-    FiSettings,
     FiList,
     FiMenu,
     FiLogOut,
+    FiUser,
 } from "react-icons/fi";
-
-import type { IconType } from "react-icons";
 import { useState } from "react";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
+import { HiOutlineUserCircle } from "react-icons/hi"; // Profile Icon
+import type { IconType } from "react-icons";
 
 const Sidebar = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const pathname = usePathname();
+    const { data: session } = useSession();
+    const userRole = session?.user?.role;
+    const userName = session?.user?.name || "User";
+    const userEmail = session?.user?.email || "example@email.com";
 
     const handleLogout = async () => {
         await signOut({ callbackUrl: "/auth/login" });
@@ -25,12 +29,11 @@ const Sidebar = () => {
     return (
         <aside
             className={`h-screen flex flex-col justify-between transition-all duration-300 
-            ${
-                isCollapsed ? "w-28" : "w-56"
-            } bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-xl p-5`}
+            ${isCollapsed ? "w-24" : "w-64"} 
+            bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-2xl p-5`}
         >
-            {/* Top Section */}
-            <div>
+            {/* 🔥 User Profile Section */}
+            <div className="mb-6">
                 <button
                     onClick={() => setIsCollapsed(!isCollapsed)}
                     className="text-2xl mb-6 focus:outline-none transition-all hover:text-green-500"
@@ -38,6 +41,27 @@ const Sidebar = () => {
                     <FiMenu />
                 </button>
 
+                {/* Profile Container */}
+                <div
+                    className={`flex items-center gap-2 p-2 rounded-2xl transition-all 
+                    ${isCollapsed ? "justify-center" : "justify-start"} 
+                    bg-gradient-to-r from-green-600/80 to-green-800/80 shadow-lg backdrop-blur-md`}
+                >
+                    <HiOutlineUserCircle className="text-xl text-white opacity-90" />
+
+                    {!isCollapsed && (
+                        <div>
+                            <p className="text-sm font-semibold text-white">
+                                {userName.toLocaleUpperCase()}
+                            </p>
+                            <p className="text-xs text-gray-200">{userEmail}</p>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* Navigation Items */}
+            <div>
                 <ul className="space-y-4">
                     <SidebarItem
                         Icon={FiHome}
@@ -60,20 +84,26 @@ const Sidebar = () => {
                         pathname={pathname}
                         isCollapsed={isCollapsed}
                     />
-                    <SidebarItem
-                        Icon={FiSettings}
-                        text="Settings"
-                        href="/settings"
-                        pathname={pathname}
-                        isCollapsed={isCollapsed}
-                    />
+
+                    {/* ✅ Show Admin Panel for Admins */}
+                    {userRole === "admin" && (
+                        <SidebarItem
+                            Icon={FiUser}
+                            text="Admin Panel"
+                            href="/admin"
+                            pathname={pathname}
+                            isCollapsed={isCollapsed}
+                        />
+                    )}
                 </ul>
             </div>
+
+            {/* Logout Button */}
             <div className="mt-auto">
                 <button
                     onClick={handleLogout}
-                    className="flex items-center px-4 py-3 rounded-lg transition-all w-full 
-                        hover:bg-red-500 text-white bg-red-600 dark:bg-red-700 dark:hover:bg-red-800"
+                    className="flex items-center px-4 py-3 rounded-xl transition-all w-full 
+                        hover:bg-red-500 text-white bg-red-600 dark:bg-red-700 dark:hover:bg-red-800 shadow-lg"
                 >
                     <FiLogOut className="text-xl" />
                     {!isCollapsed && (
@@ -104,10 +134,10 @@ const SidebarItem = ({
     return (
         <li
             onClick={() => router.push(href)}
-            className={`flex items-center px-4 py-3 rounded-lg transition-all cursor-pointer
+            className={`flex items-center px-4 py-3 rounded-xl transition-all cursor-pointer
               ${
                   isActive
-                      ? "bg-green-500 text-white border-l-4 border-green-700"
+                      ? "bg-green-500 text-white border-l-4 border-green-700 shadow-md"
                       : "hover:bg-gray-100 dark:hover:bg-gray-800"
               }
               ${isCollapsed ? "justify-center" : "space-x-3"}

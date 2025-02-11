@@ -6,6 +6,7 @@ import ThemeToggle from "./components/ThemeToggle";
 import { Providers } from "./components/Theme-context";
 
 import AuthProvider from "./components/AuthProvider";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -39,6 +40,7 @@ export default function RootLayout({
                         <AuthProvider>
                             {children}
                             <ThemeToggle />
+                            <Toaster position="top-right" />
                         </AuthProvider>
                     </TRPCProvider>
                 </Providers>

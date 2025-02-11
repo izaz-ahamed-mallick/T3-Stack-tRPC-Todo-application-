@@ -57,7 +57,12 @@ export const authOptions: NextAuthOptions = {
                 }
 
                 // ✅ Return only the required fields for JWT
-                return { id: user.id, email: user.email, role: user.role };
+                return {
+                    id: user.id,
+                    email: user.email,
+                    role: user.role,
+                    name: user.name,
+                };
             },
         }),
     ],
