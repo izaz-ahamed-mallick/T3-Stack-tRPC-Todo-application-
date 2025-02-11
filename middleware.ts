@@ -12,6 +12,9 @@ export async function middleware(req: NextRequest) {
     if (isAuthPage || pathname === "/") {
         return NextResponse.next();
     }
+    if (isAuthPage && token) {
+        return NextResponse.redirect(new URL("/", req.url));
+    }
 
     // ✅ Check if user is authenticated
     if (!token) {
@@ -27,5 +30,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-    matcher: ["/todo/:path*", "/settings"],
+    matcher: ["/todo/:path*", "/settings", "/auth/:path*"],
 };

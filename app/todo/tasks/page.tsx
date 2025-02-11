@@ -14,26 +14,22 @@ import {
 import TaskItem from "@/app/components/todo/TaskItems";
 import AddTaskModal from "@/app/components/todo/AddTaskModal";
 import { trpc } from "@/utils/trpcClient";
-
-type Task = {
-    id: string;
-    title: string;
-    description: string;
-    status: "todo" | "inProgress" | "completed";
-    createdAt: Date;
-    updatedAt: Date;
-    userId: string;
-};
+import ShimmerLoader from "@/utils/ShimmerLoader";
+import { ITodoTask } from "@/types/todoItem";
 
 export interface ItaskGroups {
-    todo: Task[];
-    inProgress: Task[];
-    completed: Task[];
+    todo: ITodoTask[];
+    inProgress: ITodoTask[];
+    completed: ITodoTask[];
 }
 
 const MyTask = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const { data: tasks = [], refetch } = trpc.todo.getAll.useQuery<Task[]>();
+    const {
+        data: tasks = [],
+        refetch,
+        isLoading,
+    } = trpc.todo.getAll.useQuery<ITodoTask[]>();
     const updateStatus = trpc.todo.updateStatus.useMutation({
         onSuccess: () => refetch(),
     });
@@ -117,7 +113,7 @@ const MyTask = () => {
     };
 
     return (
-        <div className="min-h-screen p-6 flex flex-col overflow-hidden">
+        <div className="min-h-screen p-6 flex flex-col overflow-hidden  bg-gradient-to-t from-gray-200 via-gray-300 to-white text-black dark:bg-gradient-to-t dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 dark:text-white transition-all duration-300">
             {/* Header */}
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-3xl font-bold">My Tasks</h1>
@@ -129,78 +125,96 @@ const MyTask = () => {
                 </button>
             </div>
 
-            {/* Task Board */}
-            <DragDropContext onDragEnd={handleDragEnd}>
-                <div className="grid grid-cols-3 gap-4">
-                    {Object.entries(taskGroups).map(([status, taskList]) => (
-                        <Droppable key={status} droppableId={status}>
-                            {(
-                                provided: DroppableProvided,
-                                snapshot: DroppableStateSnapshot
-                            ) => (
-                                <div
-                                    ref={provided.innerRef}
-                                    {...provided.droppableProps}
-                                    className={`p-4 rounded-lg min-h-[300px] transition-all ${
-                                        snapshot.isDraggingOver
-                                            ? "bg-gray-300 dark:bg-gray-700"
-                                            : "bg-gray-500 dark:bg-gray-800"
-                                    }`}
-                                >
-                                    <h2 className="text-xl font-semibold mb-3 capitalize">
-                                        {status.replace(/([A-Z])/g, " $1")}
-                                    </h2>
-                                    {taskList.length === 0 ? (
-                                        <p className="text-gray-400 text-center">
-                                            No tasks available
-                                        </p>
-                                    ) : (
-                                        taskList.map(
-                                            (task: Task, index: number) => (
-                                                <Draggable
-                                                    key={task.id}
-                                                    draggableId={task.id}
-                                                    index={index}
-                                                >
-                                                    {(provided, snapshot) => (
-                                                        <div
-                                                            ref={
-                                                                provided.innerRef
+            {isLoading ? (
+                <ShimmerLoader />
+            ) : (
+                <DragDropContext onDragEnd={handleDragEnd}>
+                    <div className="grid grid-cols-3 gap-4">
+                        {Object.entries(taskGroups).map(
+                            ([status, taskList]) => (
+                                <Droppable key={status} droppableId={status}>
+                                    {(
+                                        provided: DroppableProvided,
+                                        snapshot: DroppableStateSnapshot
+                                    ) => (
+                                        <div
+                                            ref={provided.innerRef}
+                                            {...provided.droppableProps}
+                                            className={`p-4 rounded-lg min-h-[300px] transition-all ${
+                                                snapshot.isDraggingOver
+                                                    ? "bg-gray-300 dark:bg-gray-700"
+                                                    : "bg-gray-500 dark:bg-gray-800"
+                                            }`}
+                                        >
+                                            <h2 className="text-xl font-semibold mb-3 capitalize">
+                                                {status.replace(
+                                                    /([A-Z])/g,
+                                                    " $1"
+                                                )}
+                                            </h2>
+                                            {taskList.length === 0 ? (
+                                                <p className="text-gray-400 text-center">
+                                                    No tasks available
+                                                </p>
+                                            ) : (
+                                                taskList.map(
+                                                    (
+                                                        task: ITodoTask,
+                                                        index: number
+                                                    ) => (
+                                                        <Draggable
+                                                            key={task.id}
+                                                            draggableId={
+                                                                task.id
                                                             }
-                                                            {...provided.draggableProps}
-                                                            {...provided.dragHandleProps}
-                                                            className={`mb-2 transition-all ${
-                                                                snapshot.isDragging
-                                                                    ? "scale-105 shadow-xl"
-                                                                    : ""
-                                                            }  `}
-                                                            style={{
-                                                                ...provided
-                                                                    .draggableProps
-                                                                    .style,
-                                                                maxWidth:
-                                                                    "100%",
-                                                            }}
+                                                            index={index}
                                                         >
-                                                            <TaskItem
-                                                                task={task}
-                                                                setTaskGroups={
-                                                                    setTaskGroups
-                                                                }
-                                                            />
-                                                        </div>
-                                                    )}
-                                                </Draggable>
-                                            )
-                                        )
+                                                            {(
+                                                                provided,
+                                                                snapshot
+                                                            ) => (
+                                                                <div
+                                                                    ref={
+                                                                        provided.innerRef
+                                                                    }
+                                                                    {...provided.draggableProps}
+                                                                    {...provided.dragHandleProps}
+                                                                    className={`mb-2 transition-all ${
+                                                                        snapshot.isDragging
+                                                                            ? "scale-105 shadow-xl"
+                                                                            : ""
+                                                                    }  `}
+                                                                    style={{
+                                                                        ...provided
+                                                                            .draggableProps
+                                                                            .style,
+                                                                        maxWidth:
+                                                                            "100%",
+                                                                    }}
+                                                                >
+                                                                    <TaskItem
+                                                                        task={
+                                                                            task
+                                                                        }
+                                                                        setTaskGroups={
+                                                                            setTaskGroups
+                                                                        }
+                                                                    />
+                                                                </div>
+                                                            )}
+                                                        </Draggable>
+                                                    )
+                                                )
+                                            )}
+                                            {provided.placeholder}
+                                        </div>
                                     )}
-                                    {provided.placeholder}
-                                </div>
-                            )}
-                        </Droppable>
-                    ))}
-                </div>
-            </DragDropContext>
+                                </Droppable>
+                            )
+                        )}
+                    </div>
+                </DragDropContext>
+            )}
 
             {/* Add Task Modal */}
             {isModalOpen && (

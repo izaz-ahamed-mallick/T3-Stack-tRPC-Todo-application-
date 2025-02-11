@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
     FiHome,
     FiCheckCircle,
@@ -13,6 +13,7 @@ import { useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import { HiOutlineUserCircle } from "react-icons/hi"; // Profile Icon
 import type { IconType } from "react-icons";
+import Link from "next/link";
 
 const Sidebar = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
@@ -30,9 +31,8 @@ const Sidebar = () => {
         <aside
             className={`h-screen flex flex-col justify-between transition-all duration-300 
             ${isCollapsed ? "w-24" : "w-64"} 
-            bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-2xl p-5`}
+            bg-gray-200 dark:bg-gray-900 text-gray-900 dark:text-white shadow-2xl p-5`}
         >
-            {/* 🔥 User Profile Section */}
             <div className="mb-6">
                 <button
                     onClick={() => setIsCollapsed(!isCollapsed)}
@@ -128,12 +128,11 @@ const SidebarItem = ({
     pathname: string;
     isCollapsed: boolean;
 }) => {
-    const router = useRouter();
     const isActive = pathname === href;
 
     return (
-        <li
-            onClick={() => router.push(href)}
+        <Link
+            href={href}
             className={`flex items-center px-4 py-3 rounded-xl transition-all cursor-pointer
               ${
                   isActive
@@ -145,7 +144,7 @@ const SidebarItem = ({
         >
             <Icon className="text-xl dark:text-white text-gray-900" />
             {!isCollapsed && <span className="text-md">{text}</span>}
-        </li>
+        </Link>
     );
 };
 

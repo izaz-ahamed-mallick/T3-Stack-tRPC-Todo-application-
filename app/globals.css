@@ -23,3 +23,12 @@ body.dark {
 body {
     @apply transition-all duration-300;
 }
+
+.noScrollBar::-webkit-scrollbar {
+    display: none; /* Hides the scrollbar */
+}
+
+.noScrollBar {
+    -ms-overflow-style: none; /* For Internet Explorer 10+ */
+    scrollbar-width: none; /* For Firefox */
+}

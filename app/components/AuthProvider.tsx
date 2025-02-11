@@ -19,12 +19,12 @@ export default function AuthProvider({
 function AuthWrapper({ children }: { children: React.ReactNode }) {
     const { data: session } = useSession();
 
-    if (status === "loading")
-        return <p className="text-center mt-10">Loading...</p>;
-
     return (
         <div className="flex">
-            {session && <Sidebar />} <main className="flex-1">{children}</main>
+            {session && <Sidebar />}
+            <main className="flex-1 max-h-screen overflow-y-auto noScrollBar">
+                {children}
+            </main>
         </div>
     );
 }

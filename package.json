@@ -5,7 +5,8 @@
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
-        "seed": "node --loader ts-node/esm prisma/seed.ts"
+        "seed": "node --loader ts-node/esm prisma/seed.ts",
+        "generate": "npx prisma generate"
     },
     "dependencies": {
         "@hello-pangea/dnd": "^18.0.1",
@@ -19,6 +20,7 @@
         "@trpc/server": "^11.0.0-rc.747",
         "bcryptjs": "^2.4.3",
         "date-fns": "^4.1.0",
+        "framer-motion": "^12.4.2",
         "jsonwebtoken": "^9.0.2",
         "next": "15.1.6",
         "next-auth": "^4.24.11",

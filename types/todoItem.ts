@@ -1,8 +1,8 @@
 export interface ITodoTask {
     id: string;
     title: string;
-    description: string | null;
-
+    description: string;
+    completed: boolean;
     createdAt: Date;
     updatedAt: Date;
     userId: string;
