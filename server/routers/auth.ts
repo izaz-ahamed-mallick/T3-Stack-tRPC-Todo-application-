@@ -21,7 +21,6 @@ export const authRouter = router({
         .mutation(async ({ input, ctx }) => {
             const { email, password, name } = input;
 
-            // ✅ Use ctx.prisma directly
             const existingUser = await ctx.prisma.user.findUnique({
                 where: { email },
             });

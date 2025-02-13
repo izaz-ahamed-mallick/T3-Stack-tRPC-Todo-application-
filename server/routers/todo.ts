@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
-import { Status } from "@prisma/client"; // ✅ Import Prisma enum
+import { Status } from "@prisma/client";
 
 export const todosRouter = router({
     getAll: protectedProcedure.query(async ({ ctx }) => {
@@ -34,7 +34,6 @@ export const todosRouter = router({
                 },
             });
 
-            // Log the activity
             await ctx.prisma.activityLog.create({
                 data: {
                     userId: ctx.user.id,
@@ -63,7 +62,6 @@ export const todosRouter = router({
                 },
             });
 
-            // Log the activity
             await ctx.prisma.activityLog.create({
                 data: {
                     userId: ctx.user.id,
@@ -100,7 +98,6 @@ export const todosRouter = router({
                 },
             });
 
-            // Log the activity
             await ctx.prisma.activityLog.create({
                 data: {
                     userId: ctx.user.id,
@@ -122,7 +119,6 @@ export const todosRouter = router({
                 where: { id: input.id },
             });
 
-            // Log the activity
             await ctx.prisma.activityLog.create({
                 data: {
                     userId: ctx.user.id,
@@ -171,7 +167,6 @@ export const todosRouter = router({
                 },
             });
 
-            // Log the activity
             await ctx.prisma.activityLog.create({
                 data: {
                     userId: ctx.user.id,
