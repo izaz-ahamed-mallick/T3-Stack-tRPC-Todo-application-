@@ -1,8 +1,9 @@
 "use client";
 
-import { SessionProvider, useSession } from "next-auth/react";
+import { SessionProvider } from "next-auth/react";
 
 import Sidebar from "./Sidebar";
+import { usePathname } from "next/navigation";
 
 export default function AuthProvider({
     children,
@@ -17,11 +18,14 @@ export default function AuthProvider({
 }
 
 function AuthWrapper({ children }: { children: React.ReactNode }) {
-    const { data: session } = useSession();
+    const pathname = usePathname();
+
+    const hideSidebarRoutes = ["/auth/login", "/auth/signup", "/"];
+    const shouldShowSidebar = !hideSidebarRoutes.includes(pathname);
 
     return (
         <div className="flex">
-            {session && <Sidebar />}
+            {shouldShowSidebar && <Sidebar />}
             <main className="flex-1 max-h-screen overflow-y-auto noScrollBar">
                 {children}
             </main>

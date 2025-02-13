@@ -1,14 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import {
-    FiHome,
-    FiCheckCircle,
-    FiList,
-    FiMenu,
-    FiLogOut,
-    FiUser,
-} from "react-icons/fi";
+import { FiHome, FiList, FiMenu, FiLogOut, FiUser } from "react-icons/fi";
 import { useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import { HiOutlineUserCircle } from "react-icons/hi"; // Profile Icon
@@ -74,13 +67,6 @@ const Sidebar = () => {
                         Icon={FiList}
                         text="My Tasks"
                         href="/todo/tasks"
-                        pathname={pathname}
-                        isCollapsed={isCollapsed}
-                    />
-                    <SidebarItem
-                        Icon={FiCheckCircle}
-                        text="Completed"
-                        href="/todo/completed"
                         pathname={pathname}
                         isCollapsed={isCollapsed}
                     />

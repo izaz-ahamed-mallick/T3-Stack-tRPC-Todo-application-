@@ -9,26 +9,26 @@ export async function middleware(req: NextRequest) {
     const { pathname } = req.nextUrl;
     const isAuthPage = pathname.startsWith("/auth");
 
-    if (isAuthPage || pathname === "/") {
+    // ✅ Allow access to auth pages even if user is NOT authenticated
+    if (isAuthPage) {
+        if (token) {
+            return NextResponse.redirect(new URL("/", req.url));
+        }
         return NextResponse.next();
     }
-    if (isAuthPage && token) {
-        return NextResponse.redirect(new URL("/", req.url));
-    }
 
-    // ✅ Check if user is authenticated
+    // ✅ Protect all other routes (require authentication)
     if (!token) {
         return NextResponse.redirect(new URL("/auth/login", req.url));
     }
 
-    // ✅ Restrict `/settings` to admins only
-    if (pathname.startsWith("/settings") && token.role !== "admin") {
-        return NextResponse.redirect(new URL("/", req.url)); // Redirect to home if not admin
+    if (pathname.startsWith("/admin") && token.role !== "admin") {
+        return NextResponse.redirect(new URL("/", req.url)); // Redirect non-admins to home
     }
 
     return NextResponse.next();
 }
 
 export const config = {
-    matcher: ["/todo/:path*", "/settings", "/auth/:path*"],
+    matcher: ["/todo/:path*", "/settings", "/auth/:path*", "/admin/:path*"],
 };

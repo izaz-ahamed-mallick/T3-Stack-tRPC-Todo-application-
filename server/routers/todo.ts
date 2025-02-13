@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
+import { Status } from "@prisma/client"; // ✅ Import Prisma enum
 
 export const todosRouter = router({
     getAll: protectedProcedure.query(async ({ ctx }) => {
@@ -8,11 +9,15 @@ export const todosRouter = router({
             orderBy: { createdAt: "desc" },
         });
     }),
+
     create: protectedProcedure
         .input(
             z.object({
                 title: z.string().min(1),
                 description: z.string().min(1),
+                tags: z.string().min(1),
+                deadline: z.string().datetime(),
+                reminder_time: z.string().datetime(),
             })
         )
         .mutation(async ({ ctx, input }) => {
@@ -20,9 +25,12 @@ export const todosRouter = router({
                 data: {
                     title: input.title,
                     description: input.description,
-                    status: "todo",
+                    status: Status.todo,
                     completed: false,
                     userId: ctx.user.id,
+                    tags: input.tags,
+                    deadline: new Date(input.deadline),
+                    reminder_time: new Date(input.reminder_time),
                 },
             });
         }),
@@ -37,7 +45,10 @@ export const todosRouter = router({
         .mutation(async ({ ctx, input }) => {
             return ctx.prisma.todo.update({
                 where: { id: input.id },
-                data: { status: input.status },
+                data: {
+                    status: input.status as Status,
+                    completed: input.status === "completed",
+                },
             });
         }),
 
@@ -52,11 +63,16 @@ export const todosRouter = router({
                 throw new Error("Todo not found");
             }
 
+            const newStatus =
+                currentTodo.completed || currentTodo.status === "completed"
+                    ? Status.todo
+                    : Status.completed;
+
             return ctx.prisma.todo.update({
                 where: { id: input.id },
                 data: {
                     completed: !currentTodo.completed,
-                    status: "completed",
+                    status: newStatus,
                 },
             });
         }),
@@ -75,45 +91,34 @@ export const todosRouter = router({
                 id: z.string(),
                 title: z.string().min(1).optional(),
                 description: z.string().min(1).optional(),
-                complete: z.boolean().optional(), // Optional, in case you want to update complete
+                completed: z.boolean().optional(),
+                tags: z.string().min(1).optional(),
+                deadline: z.string().datetime().optional(),
+                reminder_time: z.string().datetime().optional(),
             })
         )
         .mutation(async ({ ctx, input }) => {
-            const { id, title, description, complete } = input;
-
-            const currentTodo = await ctx.prisma.todo.findUnique({
-                where: { id },
-            });
-
-            if (!currentTodo) {
-                throw new Error("Todo not found");
-            }
-
             const updatedData: {
                 title?: string;
                 description?: string;
-                complete?: boolean;
+                tags?: string;
+                deadline?: Date;
+                reminder_time?: Date;
             } = {};
 
-            if (title && title !== currentTodo.title) {
-                updatedData.title = title;
-            }
-
-            if (description && description !== currentTodo.description) {
-                updatedData.description = description;
-            }
-
-            if (complete !== undefined && complete !== currentTodo.completed) {
-                updatedData.complete = complete; // Update complete if specified
-            }
-
-            if (Object.keys(updatedData).length === 0) {
-                return currentTodo;
-            }
+            if (input.title) updatedData.title = input.title;
+            if (input.description) updatedData.description = input.description;
+            if (input.tags) updatedData.tags = input.tags;
+            if (input.deadline) updatedData.deadline = new Date(input.deadline);
+            if (input.reminder_time)
+                updatedData.reminder_time = new Date(input.reminder_time);
 
             return ctx.prisma.todo.update({
-                where: { id },
-                data: updatedData,
+                where: { id: input.id },
+                data: {
+                    ...updatedData,
+                    completed: false,
+                },
             });
         }),
 });
