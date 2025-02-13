@@ -118,7 +118,7 @@ const TodoHome: React.FC = () => {
             {/* Header Section */}
             <div className="w-full max-w-4xl text-center p-12 bg-gradient-to-b from-white to-gray-100 backdrop-blur-lg rounded-3xl shadow-2xl border border-gray-300 dark:bg-gradient-to-b dark:from-white/20 dark:to-gray-200/10 dark:shadow-black/50 dark:border-white/20">
                 <h1 className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-teal-500 tracking-tight dark:from-blue-500 dark:to-teal-400">
-                    Todo List
+                    TaskFlow
                 </h1>
                 <p className="text-xl mt-4 text-gray-700 opacity-80 dark:text-gray-300">
                     Stay productive and organized with your tasks.

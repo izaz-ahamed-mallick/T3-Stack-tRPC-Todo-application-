@@ -44,7 +44,7 @@ export const authOptions: NextAuthOptions = {
                 });
 
                 if (!user || !user.password) {
-                    throw new Error("User not found or signed up via OAuth");
+                    throw new Error("User not found or signed up");
                 }
 
                 const isValidPassword = await compare(

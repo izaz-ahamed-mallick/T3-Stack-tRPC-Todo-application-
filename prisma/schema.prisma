@@ -45,8 +45,18 @@ model User {
   resetTokenExpiry DateTime?
   accounts       Account[]
    todos Todo[]
+   activityLogs   ActivityLog[]
  
 }
+
+model ActivityLog {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  action    String   // e.g., "Updated role", "Deleted task"
+  timestamp DateTime @default(now())
+}
+
 
 model Account {
   id                 String  @id @default(uuid())

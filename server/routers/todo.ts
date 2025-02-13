@@ -21,7 +21,7 @@ export const todosRouter = router({
             })
         )
         .mutation(async ({ ctx, input }) => {
-            return ctx.prisma.todo.create({
+            const newTodo = await ctx.prisma.todo.create({
                 data: {
                     title: input.title,
                     description: input.description,
@@ -33,6 +33,18 @@ export const todosRouter = router({
                     reminder_time: new Date(input.reminder_time),
                 },
             });
+
+            // Log the activity
+            await ctx.prisma.activityLog.create({
+                data: {
+                    userId: ctx.user.id,
+                    action: `${
+                        ctx.user.name || ctx.user.email
+                    } created a new task: ${newTodo.title}`,
+                },
+            });
+
+            return newTodo;
         }),
 
     updateStatus: protectedProcedure
@@ -43,13 +55,25 @@ export const todosRouter = router({
             })
         )
         .mutation(async ({ ctx, input }) => {
-            return ctx.prisma.todo.update({
+            const updatedTodo = await ctx.prisma.todo.update({
                 where: { id: input.id },
                 data: {
                     status: input.status as Status,
                     completed: input.status === "completed",
                 },
             });
+
+            // Log the activity
+            await ctx.prisma.activityLog.create({
+                data: {
+                    userId: ctx.user.id,
+                    action: `${ctx.user.name || ctx.user.email} updated task "${
+                        updatedTodo.title
+                    }" status to ${input.status}`,
+                },
+            });
+
+            return updatedTodo;
         }),
 
     toggleComplete: protectedProcedure
@@ -68,21 +92,47 @@ export const todosRouter = router({
                     ? Status.todo
                     : Status.completed;
 
-            return ctx.prisma.todo.update({
+            const updatedTodo = await ctx.prisma.todo.update({
                 where: { id: input.id },
                 data: {
                     completed: !currentTodo.completed,
                     status: newStatus,
                 },
             });
+
+            // Log the activity
+            await ctx.prisma.activityLog.create({
+                data: {
+                    userId: ctx.user.id,
+                    action: `${ctx.user.name || ctx.user.email} marked task "${
+                        updatedTodo.title
+                    }" as ${
+                        updatedTodo.completed ? "completed" : "not completed"
+                    }`,
+                },
+            });
+
+            return updatedTodo;
         }),
 
     delete: protectedProcedure
         .input(z.object({ id: z.string() }))
         .mutation(async ({ ctx, input }) => {
-            return ctx.prisma.todo.delete({
+            const deletedTodo = await ctx.prisma.todo.delete({
                 where: { id: input.id },
             });
+
+            // Log the activity
+            await ctx.prisma.activityLog.create({
+                data: {
+                    userId: ctx.user.id,
+                    action: `${ctx.user.name || ctx.user.email} deleted task: ${
+                        deletedTodo.title
+                    }`,
+                },
+            });
+
+            return deletedTodo;
         }),
 
     updateTodo: protectedProcedure
@@ -113,12 +163,24 @@ export const todosRouter = router({
             if (input.reminder_time)
                 updatedData.reminder_time = new Date(input.reminder_time);
 
-            return ctx.prisma.todo.update({
+            const updatedTodo = await ctx.prisma.todo.update({
                 where: { id: input.id },
                 data: {
                     ...updatedData,
                     completed: false,
                 },
             });
+
+            // Log the activity
+            await ctx.prisma.activityLog.create({
+                data: {
+                    userId: ctx.user.id,
+                    action: `${ctx.user.name || ctx.user.email} updated task: ${
+                        updatedTodo.title
+                    }`,
+                },
+            });
+
+            return updatedTodo;
         }),
 });

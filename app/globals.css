@@ -32,3 +32,7 @@ body {
     -ms-overflow-style: none; /* For Internet Explorer 10+ */
     scrollbar-width: none; /* For Firefox */
 }
+
+.no-scroll-on-recent::-webkit-scrollbar {
+    display: none; /* Hides the scrollbar */
+}
