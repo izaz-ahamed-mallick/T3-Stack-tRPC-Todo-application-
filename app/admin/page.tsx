@@ -32,10 +32,8 @@ const Admin = () => {
     };
 
     return (
-        <div className="min-h-screen bg-background text-foreground p-8">
-            {/* Stats Cards */}
+        <div className="min-h-screen pt-20 p-8 bg-background text-foreground md:pt-16 md:p-8">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-10">
-                {/* Users Card */}
                 <div className="p-6 rounded-xl bg-gradient-to-b from-gray-100 to-white dark:from-gray-900 dark:to-gray-800 shadow-xl border border-border transition hover:scale-[1.02]">
                     <div className="flex items-center gap-3 text-lg font-semibold">
                         <Users size={28} className="text-primary" />
@@ -46,7 +44,6 @@ const Admin = () => {
                     </p>
                 </div>
 
-                {/* Active Tasks Card */}
                 <div className="p-6 rounded-xl bg-gradient-to-b from-gray-100 to-white dark:from-gray-900 dark:to-gray-800 shadow-xl border border-border transition hover:scale-[1.02]">
                     <div className="flex items-center gap-3 text-lg font-semibold">
                         <ClipboardList size={28} className="text-primary" />
@@ -60,7 +57,6 @@ const Admin = () => {
                     </p>
                 </div>
 
-                {/* Recent Activities Card */}
                 <div className="p-6 rounded-xl bg-gradient-to-b from-gray-100 to-white dark:from-gray-900 dark:to-gray-800 shadow-xl border border-border transition hover:scale-[1.02]">
                     <div className="flex items-center gap-3 text-lg font-semibold">
                         <Activity size={28} className="text-primary" />
@@ -72,15 +68,14 @@ const Admin = () => {
                 </div>
             </div>
 
-            {/* Users Table */}
             <div className="bg-muted p-6 rounded-xl shadow-lg border border-border">
                 <h2 className="text-2xl font-semibold mb-5">
                     All Users & Tasks
                 </h2>
-                <div className="overflow-x-auto">
-                    <table className="w-full border-collapse">
+                <div className="overflow-x-auto scrollbar">
+                    <table className="w-full border-collapse min-w-[600px] sm:min-w-full">
                         <thead>
-                            <tr className="border-b border-border">
+                            <tr className="border-b border-border bg-gray-100 dark:bg-gray-800">
                                 <th className="p-2 text-left">User</th>
                                 <th className="p-2 text-left">Email</th>
                                 <th className="p-2 text-left">Role</th>
@@ -163,20 +158,19 @@ const Admin = () => {
                 </div>
             </div>
 
-            {/* Activity Logs */}
             <div className="mt-12 bg-muted p-6 rounded-xl shadow-lg border border-border">
                 <h2 className="text-2xl font-semibold mb-5">
                     Recent Activity Logs
                 </h2>
-                <div className="h-[400px] overflow-y-auto no-scroll-on-recent">
-                    <ul className="space-y-4 ">
+                <div className="h-[400px] overflow-y-auto no-scroll-on-recent scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">
+                    <ul className="space-y-4">
                         {activityLogs?.map((log) => (
                             <li
                                 key={log.id}
-                                className="flex justify-between text-lg"
+                                className="flex justify-between text-sm md:text-lg"
                             >
                                 <span>{log.action}</span>
-                                <span className="text-gray-500 text-sm">
+                                <span className="text-gray-500 text-xs md:text-sm">
                                     {new Date(
                                         log.timestamp
                                     ).toLocaleTimeString()}

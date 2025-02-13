@@ -46,10 +46,10 @@ const Login = () => {
     }
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen transition-colors bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-white">
-            <div className="w-full max-w-md p-8 rounded-2xl shadow-2xl border transition-all bg-white border-gray-300 dark:bg-gray-800 dark:border-gray-700">
-                <h2 className="flex items-center justify-center gap-2 text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-green-600 dark:from-green-300 dark:to-green-500 text-3xl font-extrabold mb-6 text-center animate-pulse">
-                    <FiClipboard className="text-green-500 dark:text-green-400 text-4xl" />
+        <div className="flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 lg:px-8 transition-colors bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-white">
+            <div className="w-full max-w-sm sm:max-w-md p-6 sm:p-8 rounded-2xl shadow-2xl border transition-all bg-white border-gray-300 dark:bg-gray-800 dark:border-gray-700">
+                <h2 className="flex items-center justify-center gap-2 text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-green-600 dark:from-green-300 dark:to-green-500 text-2xl sm:text-3xl font-extrabold mb-6 text-center animate-pulse">
+                    <FiClipboard className="text-green-500 dark:text-green-400 text-3xl sm:text-4xl" />
                     Access Your Tasks
                 </h2>
 
@@ -101,8 +101,7 @@ const Login = () => {
                     <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-semibold transition duration-300 shadow-lg relative 
-                        before:absolute before:inset-0 before:rounded-lg before:bg-green-400 before:opacity-0 before:transition before:duration-300"
+                        className="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-semibold transition duration-300 shadow-lg relative"
                     >
                         {isSubmitting ? "Logging in..." : "Let’s Go 🚀"}
                     </button>

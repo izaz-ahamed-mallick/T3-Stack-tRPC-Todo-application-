@@ -114,13 +114,12 @@ const TodoHome: React.FC = () => {
     }, [selectedTag, allTodos]);
 
     return (
-        <div className="min-h-screen flex flex-col items-center p-8 bg-gradient-to-br from-gray-100 via-white to-gray-200 text-gray-900 transition-all duration-300 dark:bg-gradient-to-br dark:from-gray-900 dark:via-gray-800 dark:to-black dark:text-white">
-            {/* Header Section */}
-            <div className="w-full max-w-4xl text-center p-12 bg-gradient-to-b from-white to-gray-100 backdrop-blur-lg rounded-3xl shadow-2xl border border-gray-300 dark:bg-gradient-to-b dark:from-white/20 dark:to-gray-200/10 dark:shadow-black/50 dark:border-white/20">
-                <h1 className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-teal-500 tracking-tight dark:from-blue-500 dark:to-teal-400">
+        <div className="min-h-screen flex flex-col items-center p-4 md:p-8 pt-16 bg-gradient-to-br from-gray-100 via-white to-gray-200 text-gray-900 transition-all duration-300 dark:bg-gradient-to-br dark:from-gray-900 dark:via-gray-800 dark:to-black dark:text-white">
+            <div className="w-full max-w-4xl text-center p-6 md:p-12 rounded-3xl shadow-2xl border border-gray-700">
+                <h1 className="text-3xl md:text-6xl font-bold bg-gradient-to-r from-blue-500 to-teal-400 text-transparent bg-clip-text">
                     TaskFlow
                 </h1>
-                <p className="text-xl mt-4 text-gray-700 opacity-80 dark:text-gray-300">
+                <p className="text-sm md:text-lg mt-2 md:mt-4 text-gray-400">
                     Stay productive and organized with your tasks.
                 </p>
             </div>
@@ -128,7 +127,7 @@ const TodoHome: React.FC = () => {
             {/* Input Section */}
             <form
                 onSubmit={handleSubmit(onSubmit)}
-                className="w-full max-w-2xl mt-10 p-10 bg-white/10 backdrop-blur-2xl rounded-3xl shadow-[0px_12px_40px_rgba(255,255,255,0.2)] border border-white/30 transition-all duration-300 dark:bg-white/5 dark:border-white/20 dark:shadow-black/50"
+                className="w-full max-w-2xl mt-10 p-6 sm:p-10 bg-white/10 backdrop-blur-2xl rounded-3xl shadow-[0px_12px_40px_rgba(255,255,255,0.2)] border border-white/30 transition-all duration-300 dark:bg-white/5 dark:border-white/20 dark:shadow-black/50"
             >
                 <label className="block text-gray-700 dark:text-gray-300 text-lg font-semibold mb-2">
                     Task Title
@@ -192,10 +191,10 @@ const TodoHome: React.FC = () => {
                 <div className="text-center">
                     <button
                         type="submit"
-                        className={`relative px-8 py-4 text-white rounded-full shadow-xl transition-all duration-300 transform hover:scale-105 overflow-hidden before:absolute before:top-0 before:left-0 before:w-full before:h-full before:bg-white/10 before:opacity-0 before:transition-opacity before:duration-300 before:hover:opacity-20 ${
+                        className={`relative px-8 py-4 text-white rounded-full shadow-xl transition-all duration-300 transform hover:scale-105 hover:rotate-2 overflow-hidden before:absolute before:top-0 before:left-0 before:w-full before:h-full before:bg-white/10 before:opacity-0 before:transition-opacity before:duration-300 before:hover:opacity-20 ${
                             editingTodo
-                                ? "bg-gradient-to-r from-green-400 to-green-500 hover:from-green-500 hover:to-green-600"
-                                : "bg-gradient-to-r from-blue-400 to-blue-500 hover:from-blue-500 hover:to-blue-600"
+                                ? "bg-gradient-to-r from-green-400 to-green-600 hover:from-green-500 hover:to-green-700"
+                                : "bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700"
                         } dark:shadow-blue-500/50 dark:hover:shadow-blue-600/60`}
                     >
                         {editingTodo ? "Update Task" : "Add Task"}
@@ -203,7 +202,6 @@ const TodoHome: React.FC = () => {
                 </div>
             </form>
 
-            {/* Tags Section */}
             <div className="w-full max-w-2xl mt-4 flex gap-4 justify-center">
                 {allTodos &&
                     allTodos.length > 0 &&
@@ -242,7 +240,6 @@ const TodoHome: React.FC = () => {
                             </div>
                         )}
 
-                        {/* 🔹 Task Title */}
                         <h3
                             className={`text-3xl font-semibold ${
                                 todo.completed
@@ -253,7 +250,6 @@ const TodoHome: React.FC = () => {
                             {todo.title}
                         </h3>
 
-                        {/* 🔹 Task Description */}
                         <p
                             className={`mt-2 ${
                                 todo.completed
@@ -275,7 +271,6 @@ const TodoHome: React.FC = () => {
                             </div>
                         )}
 
-                        {/* 🔹 Task Actions */}
                         <div className="flex gap-4 mt-4">
                             <button
                                 onClick={() => toggleComplete(todo.id)}

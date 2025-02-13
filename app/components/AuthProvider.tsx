@@ -26,7 +26,7 @@ function AuthWrapper({ children }: { children: React.ReactNode }) {
     return (
         <div className="flex">
             {shouldShowSidebar && <Sidebar />}
-            <main className="flex-1 max-h-screen overflow-y-auto noScrollBar">
+            <main className="flex-1  max-h-screen overflow-y-auto noScrollBar">
                 {children}
             </main>
         </div>

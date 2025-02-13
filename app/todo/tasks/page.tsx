@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { FiPlus } from "react-icons/fi";
+
 import {
     DragDropContext,
     Droppable,
@@ -12,7 +12,7 @@ import {
 } from "@hello-pangea/dnd";
 
 import TaskItem from "@/app/components/todo/TaskItems";
-import AddTaskModal from "@/app/components/todo/AddTaskModal";
+
 import { trpc } from "@/utils/trpcClient";
 import ShimmerLoader from "@/utils/ShimmerLoader";
 import { ITodoTask } from "@/types/todoItem";
@@ -24,7 +24,6 @@ export interface ItaskGroups {
 }
 
 const MyTask = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const {
         data: tasks = [],
         refetch,
@@ -113,23 +112,16 @@ const MyTask = () => {
     };
 
     return (
-        <div className="min-h-screen p-6 flex flex-col overflow-hidden  bg-gradient-to-t from-gray-200 via-gray-300 to-white text-black dark:bg-gradient-to-t dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 dark:text-white transition-all duration-300">
-            {/* Header */}
+        <div className="min-h-screen pt-16 p-4 md:pt-6 md:p-6 flex flex-col overflow-hidden bg-gradient-to-t from-gray-200 via-gray-300 to-white text-black dark:bg-gradient-to-t dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 dark:text-white transition-all duration-300">
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-3xl font-bold">My Tasks</h1>
-                <button
-                    onClick={() => setIsModalOpen(true)}
-                    className="flex items-center gap-2 bg-green-600 hover:bg-green-700 px-4 py-2 mr-10 rounded-lg"
-                >
-                    <FiPlus /> Add Task
-                </button>
             </div>
 
             {isLoading ? (
                 <ShimmerLoader />
             ) : (
                 <DragDropContext onDragEnd={handleDragEnd}>
-                    <div className="grid grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {Object.entries(taskGroups).map(
                             ([status, taskList]) => (
                                 <Droppable key={status} droppableId={status}>
@@ -183,7 +175,7 @@ const MyTask = () => {
                                                                         snapshot.isDragging
                                                                             ? "scale-105 shadow-xl"
                                                                             : ""
-                                                                    }  `}
+                                                                    }`}
                                                                     style={{
                                                                         ...provided
                                                                             .draggableProps
@@ -214,15 +206,6 @@ const MyTask = () => {
                         )}
                     </div>
                 </DragDropContext>
-            )}
-
-            {/* Add Task Modal */}
-            {isModalOpen && (
-                <AddTaskModal
-                    isOpen={isModalOpen}
-                    onClose={() => setIsModalOpen(false)}
-                    onSave={refetch}
-                />
             )}
         </div>
     );
