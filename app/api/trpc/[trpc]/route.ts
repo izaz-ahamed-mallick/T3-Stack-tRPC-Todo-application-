@@ -4,7 +4,7 @@ import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 
 const handler = (req: Request) =>
     fetchRequestHandler({
-        endpoint: "/api/trpc", // This could be left as is if you're using dynamic routing with Next.js App Router
+        endpoint: "/api/trpc",
         req,
         router: appRouter,
         createContext,

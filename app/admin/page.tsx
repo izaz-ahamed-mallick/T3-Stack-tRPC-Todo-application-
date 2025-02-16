@@ -102,7 +102,7 @@ const Admin = () => {
                                                         | "admin"
                                                 )
                                             }
-                                            className="bg-transparent border border-border px-2 py-1 rounded"
+                                            className=" border border-border px-2 py-1 rounded"
                                         >
                                             <option value="user">User</option>
                                             <option value="admin">Admin</option>

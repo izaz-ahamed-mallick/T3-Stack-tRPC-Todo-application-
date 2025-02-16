@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { motion } from "framer-motion";
-import { FaCheck, FaClock, FaEdit, FaTrash } from "react-icons/fa";
+
 import { trpc } from "@/utils/trpcClient";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { ITodoTask } from "@/types/todoItem";
+import TodoItem from "@/app/components/TodoItem";
 
 interface TodoFormData {
     title: string;
@@ -21,8 +21,7 @@ const TodoHome: React.FC = () => {
 
     const { data: allTodos, refetch } = trpc.todo.getAll.useQuery();
     const addTodoMutation = trpc.todo.create.useMutation();
-    const toggleCompleteMutation = trpc.todo.toggleComplete.useMutation();
-    const deleteTodoMutation = trpc.todo.delete.useMutation();
+
     const updateTodoMutation = trpc.todo.updateTodo.useMutation();
 
     const {
@@ -61,16 +60,6 @@ const TodoHome: React.FC = () => {
         }
 
         reset();
-        refetch();
-    };
-
-    const toggleComplete = async (id: string) => {
-        await toggleCompleteMutation.mutateAsync({ id });
-        refetch();
-    };
-
-    const deleteTodo = async (id: string) => {
-        await deleteTodoMutation.mutateAsync({ id });
         refetch();
     };
 
@@ -223,77 +212,13 @@ const TodoHome: React.FC = () => {
             {/* Todo List */}
             <div className="w-full max-w-2xl mt-8">
                 {filteredTodos?.map((todo) => (
-                    <motion.div
-                        key={todo.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        className={`relative p-6 mb-4 rounded-3xl shadow-2xl border transition-all duration-300 ${
-                            todo.completed
-                                ? "bg-gradient-to-br from-gray-400 to-gray-200 opacity-80 border-gray-300 shadow-lg shadow-purple-300/50 scale-105 dark:from-[#4a4a4a] dark:to-[#1e1e1e] dark:border-white/20 dark:shadow-[0_0_20px_#c5a3ff]"
-                                : "bg-gradient-to-r from-gray-300 to-gray-200 dark:from-gray-800 dark:to-gray-900"
-                        }`}
-                    >
-                        {todo.completed && (
-                            <div className="absolute top-0 right-0 bg-purple-500 text-white text-xs px-3 py-1 rounded-bl-3xl font-semibold shadow-lg">
-                                ✅ Completed
-                            </div>
-                        )}
-
-                        <h3
-                            className={`text-3xl font-semibold ${
-                                todo.completed
-                                    ? "text-gray-700 drop-shadow-lg dark:text-white/70"
-                                    : "text-gray-900 dark:text-white"
-                            }`}
-                        >
-                            {todo.title}
-                        </h3>
-
-                        <p
-                            className={`mt-2 ${
-                                todo.completed
-                                    ? "text-gray-600 italic drop-shadow-md dark:text-gray-300/80"
-                                    : "text-gray-700 dark:text-gray-400"
-                            }`}
-                        >
-                            {todo.description}
-                        </p>
-
-                        {/* 🔹 Task Deadline */}
-                        {todo.deadline && (
-                            <div className="mt-3 flex items-center gap-2 text-gray-800 dark:text-gray-300 text-sm">
-                                <FaClock className="text-blue-500" />
-                                <span className="font-semibold">Deadline:</span>
-                                <span>
-                                    {new Date(todo.deadline).toLocaleString()}
-                                </span>
-                            </div>
-                        )}
-
-                        <div className="flex gap-4 mt-4">
-                            <button
-                                onClick={() => toggleComplete(todo.id)}
-                                className="transition-all duration-300 transform hover:scale-110 text-green-500 hover:text-green-600 dark:text-green-400 dark:hover:text-green-500"
-                            >
-                                <FaCheck />
-                            </button>
-                            {!todo.completed && (
-                                <button
-                                    onClick={() => startEditing(todo)}
-                                    className="text-yellow-500 hover:text-yellow-600 transition-all duration-300 transform hover:scale-110"
-                                >
-                                    <FaEdit />
-                                </button>
-                            )}
-                            <button
-                                onClick={() => deleteTodo(todo.id)}
-                                className="text-red-500 hover:text-red-600 transition-all duration-300 transform hover:scale-110"
-                            >
-                                <FaTrash />
-                            </button>
-                        </div>
-                    </motion.div>
+                    <div key={todo.id}>
+                        <TodoItem
+                            todo={todo}
+                            refetch={refetch}
+                            startEditing={startEditing}
+                        />
+                    </div>
                 ))}
             </div>
         </div>

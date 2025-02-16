@@ -1,10 +1,9 @@
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/prisma/prismaClient";
 import { getServerSession } from "next-auth";
-import type { NextApiRequest } from "next";
 
-export const createContext = async ({ req }: { req: NextApiRequest }) => {
-    const session = await getServerSession({ req, ...authOptions });
+export const createContext = async () => {
+    const session = await getServerSession(authOptions);
     return { prisma, session };
 };
 
