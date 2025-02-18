@@ -43,6 +43,7 @@ model User {
   updatedAt      DateTime  @default(now())
   resetToken     String?  @unique
   resetTokenExpiry DateTime?
+ permissions Json?  
   accounts       Account[]
    todos Todo[]
    activityLogs   ActivityLog[]

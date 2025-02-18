@@ -35,6 +35,20 @@ const isAdmin = t.middleware(({ ctx, next }) => {
     return next();
 });
 
+export const subadminProcedure = t.procedure.use(async ({ ctx, next }) => {
+    if (
+        !ctx.session?.user ||
+        (ctx.session.user.role !== "admin" &&
+            ctx.session.user.role !== "subadmin")
+    ) {
+        throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "Admins or Subadmins only",
+        });
+    }
+    return next();
+});
+
 export const adminProcedure = t.procedure.use(isAdmin);
 
 export const router = t.router;

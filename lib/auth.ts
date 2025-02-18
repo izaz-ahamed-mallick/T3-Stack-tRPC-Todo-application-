@@ -1,15 +1,16 @@
-import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "@/prisma/prismaClient";
 import { compare } from "bcryptjs";
-import type { JWT } from "next-auth/jwt";
-import type { DefaultSession, Session, User } from "next-auth";
+
+import type { DefaultSession } from "next-auth";
+import type { NextAuthOptions, User as NextAuthUser } from "next-auth";
 
 declare module "next-auth" {
     interface User {
         id: string;
         role: string;
+        permissions: string[]; // Ensure permissions are treated as a string array
     }
 
     interface Session {
@@ -35,6 +36,7 @@ export const authOptions: NextAuthOptions = {
                 password: { label: "Password", type: "password" },
             },
             async authorize(credentials) {
+                // Include 'req' as second parameter
                 if (!credentials?.email || !credentials?.password) {
                     throw new Error("Invalid email or password");
                 }
@@ -56,28 +58,38 @@ export const authOptions: NextAuthOptions = {
                     throw new Error("Incorrect password");
                 }
 
-                // ✅ Return only the required fields for JWT
-                return {
+                // ✅ Ensure the returned object matches the NextAuth User type
+                const authUser: NextAuthUser = {
                     id: user.id,
                     email: user.email,
                     role: user.role,
                     name: user.name,
+                    permissions: (user.permissions as string[]) || [], // Ensure permissions are a string[]
                 };
+
+                return authUser;
             },
         }),
     ],
     callbacks: {
-        async jwt({ token, user }: { token: JWT; user?: User }) {
+        async jwt({ token, user }) {
             if (user) {
                 token.id = user.id;
                 token.role = user.role;
             }
             return token;
         },
-        async session({ session, token }: { session: Session; token: JWT }) {
+        async session({ session, token }) {
             if (session.user) {
                 session.user.id = token.id;
                 session.user.role = token.role;
+
+                const user = await prisma.user.findUnique({
+                    where: { id: token.id },
+                });
+
+                session.user.permissions =
+                    (user?.permissions as string[]) || [];
             }
             return session;
         },

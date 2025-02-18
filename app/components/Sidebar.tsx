@@ -111,6 +111,15 @@ const Sidebar = () => {
                                 isCollapsed={isCollapsed}
                             />
                         )}
+                        {userRole === "subadmin" && (
+                            <SidebarItem
+                                Icon={FiUser}
+                                text="Subadmin Panel"
+                                href="/admin"
+                                pathname={pathname}
+                                isCollapsed={isCollapsed}
+                            />
+                        )}
                     </ul>
                 </div>
 
