@@ -64,7 +64,7 @@ export const authOptions: NextAuthOptions = {
                     email: user.email,
                     role: user.role,
                     name: user.name,
-                    permissions: (user.permissions as string[]) || [], // Ensure permissions are a string[]
+                    permissions: (user.permissions as string[]) || [],
                 };
 
                 return authUser;

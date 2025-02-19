@@ -4,9 +4,9 @@ export type ITodoTask = {
     description: string;
     status: "todo" | "inProgress" | "completed";
     completed: boolean;
-    tags: string; // ✅ Required
-    deadline: Date; // ✅ Required
-    reminder_time: Date; // ✅ Required
+    tags: string;
+    deadline: Date;
+    reminder_time: Date;
     userId: string;
     createdAt: Date;
     updatedAt: Date;

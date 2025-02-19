@@ -176,7 +176,7 @@ const Admin = () => {
                                                                 | "admin"
                                                         )
                                                     }
-                                                    className="border border-border px-2 py-1 rounded bg-background text-foreground"
+                                                    className="border border-border px-2 py-1 rounded "
                                                 >
                                                     {/* Subadmin: Can change only User ↔ Subadmin */}
                                                     {session?.user.role ===
@@ -265,8 +265,12 @@ const DashboardCard = ({
 const RoleBadge = ({ role }: { role: string }) => (
     <span
         className={`text-white text-xs font-medium px-2 py-1 rounded-lg bg-${
-            role === "admin" ? "green" : role === "subadmin" ? "blue" : "gray"
-        }-500`}
+            role === "admin"
+                ? "green-600"
+                : role === "subadmin"
+                ? "blue-600"
+                : "gray-600"
+        }`}
     >
         {role.charAt(0).toUpperCase() + role.slice(1)}
     </span>
