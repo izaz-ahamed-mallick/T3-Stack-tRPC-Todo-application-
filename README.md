@@ -7,10 +7,10 @@ This is a modern and feature-rich **To-Do Web Application** with an integrated *
 - **Framework:** Next.js (App Router)
 - **Language:** TypeScript
 - **Backend:** tRPC
-- **Database:** PostgreSQL with Prisma ORM
+- **Database:** SQLite with Prisma ORM
 - **Authentication:** NextAuth.js
 - **UI Library:** Tailwind CSS (Black Theme, Dark/Light Mode Support)
-- **Hosting:** Vercel / AWS
+
 
 ## ✨ Features
 ### 📝 User Features
